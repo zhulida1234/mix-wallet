@@ -8,6 +8,7 @@ const { privateToPublic,publicToBuffer, toBuffer } = require('ethereumjs-util');
 export function createMnemonic(length: any) {
     // 生成 12 字的助记词
   const mnemonic = bip39.generateMnemonic(128); // 128 bits => 12 words
+
   return mnemonic;
 }
 

@@ -1,3 +1,5 @@
+const bip39 = require('bip39');
+
 require('dotenv').config();
 const { createMnemonic,validationMnemonic,generateKeyPair,compressPublicKey} = require("../src/base");
 const config = require('../config.json');
@@ -38,6 +40,19 @@ describe('wallet unit test case', ()=> {
         const publicKey = '0x39f21b4139fa88bb2f5f2913de16491ae53186f2e3395c5c40834a7d872b02649fa23f6442cd24feb01d680eedf99ea8a2f3b0a5e7634289c119f359d96c92f1';
         const compressKey = compressPublicKey(publicKey);
         console.log("compressKey",compressKey);
+    })
+
+    test('the random hex is not the seed',async ()=>{
+        // const hex =  await bip39.mnemonicToSeed('arch asthma usual gaze movie stumble blood load buffalo armor disagree earth','');
+        // console.log('hex',hex.toString('hex'))
+
+        const buf =  Buffer.from('0b01c3c0b0590faf45fc171da17cfb22','hex');
+        console.log(buf)
+        const mnemonic =  bip39.entropyToMnemonic(buf)
+        console.log(mnemonic)
+
+        const seed = bip39.mnemonicToSeedSync(mnemonic,'');
+        console.log(seed)
     })
 
 

@@ -155,7 +155,6 @@ export async function generateWallet(){
     const address = await walletKeys.getPrimaryAddress();
     const spendKey = await walletKeys.getPublicSpendKey();
     const privateKey = await walletKeys.getPrivateSpendKey();
-
     console.log("Seed phrase: " + mnemonic);
     console.log("Address: " + address); // get address of account 0, subaddress 0
     console.log("Spend key: " + spendKey);
