@@ -37,6 +37,8 @@
     "@noble/ed25519": "^2.1.0",
     "@solana/spl-token": "0.1.8",
     "@solana/web3.js": "^1.95.3",
+    "@ton/crypto": "^3.3.0",
+    "@ton/ton": "^15.1.0",
     "axios": "^1.7.7",
     "base58": "^2.0.1",
     "bech32": "2.0.0",
@@ -47,6 +49,7 @@
     "https-proxy-agent": "^7.0.5",
     "monero-ts": "^0.11.1",
     "protobufjs": "6.11.2",
-    "tiny-secp256k1": "^2.2.3"
+    "tiny-secp256k1": "^2.2.3",
+    "tonweb-lite": "^0.0.4"
   }
 }

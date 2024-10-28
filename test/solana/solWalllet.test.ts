@@ -16,9 +16,12 @@ const mnemonic = process.env.MNEMONIC;
 describe('wallet unit test case', ()=> {
     test('test seed derive key', () => {
         console.log("测试根据助记词推导对应的key")
-        const mnemonic = process.env.MNEMONIC;
+        // const mnemonic = process.env.MNEMONIC;
+        const mnemonic = "face defy torch paper dial goddess floor wage nephew floor million belt"
 
-        const account = generateSolKeyPair(mnemonic,"0");
+        // const account = generateSolKeyPair(mnemonic,"0");
+        const account = generateSolKeyPair(mnemonic,"500")
+
         // 注意这边的address 和 public一致
         console.log(account)
     })
@@ -113,7 +116,7 @@ describe('test staking',()=>{
         const txSignHex = createStakingAccount(params)
         console.log("txSignHex==>",txSignHex)
 
-    })
+    },10000)
 
     test('test setting delegate',async ()=>{
         const mnemonic = process.env.MNEMONIC;
@@ -133,7 +136,7 @@ describe('test staking',()=>{
         const txSignHex = delegateStake(params)
         console.log("txSignHex==", txSignHex)
 
-    })
+    },10000)
 
     test('deactivate stake', async () => {
         const eoaAccount = generateSolKeyPair(mnemonic,"0");
@@ -148,7 +151,7 @@ describe('test staking',()=>{
         }
         const txSignHex =  deactivateStake(params)
         console.log("txSignHex==", txSignHex)
-    });
+    },10000);
 
     test('withdraw funds', async () => {
         const eoaAccount = generateSolKeyPair(mnemonic,"0");

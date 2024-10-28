@@ -96,7 +96,7 @@ export function createStakingAccount(params: any) {
     tx.add(delegateTransaction)
 
     tx.recentBlockhash = recentBlockhash;
-    tx.sign(fromPublicKey, stakeAccount);
+    tx.sign(fromPublicKey,stakeAccount);
 
     return tx.serialize().toString("base64");
 }
