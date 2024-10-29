@@ -2,10 +2,6 @@ import {createAddressByWalletVersion,createAddressByMnemonic} from "../../src/to
 import {WalletVersion} from "../../src/tonCoin/walletCommon";
 require('dotenv').config();
 
-
-
-
-
 describe("tonCoin wallet address and transaction test",()=>{
     test('create address',async()=>{
 
