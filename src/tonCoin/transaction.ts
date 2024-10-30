@@ -30,7 +30,8 @@ export async function createTransaction(account:any){
             })
         ]
     })
-    await walletContract.send(tx);
+    // 最后一步是发送交易的逻辑，如果不需要，可以注释掉
+    // await walletContract.send(tx);
 
     return tx;
 
