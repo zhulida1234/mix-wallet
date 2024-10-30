@@ -77,8 +77,6 @@ export async function createAddressByWalletVersion(mnemonic:string,version:Walle
 
     const keyPair = await mnemonicToKeypair(mnemonic)
 
-    console.log("public Key",keyPair.publicKey.toString("hex"))
-    console.log("private_Key",keyPair.secretKey.toString("hex"))
     let wallet;
     let address = "";
     let balance;

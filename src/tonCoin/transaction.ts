@@ -1,6 +1,7 @@
-import {internal, TonClient, WalletContractV4} from "@ton/ton";
-import * as buffer from "node:buffer";
+import {internal,external,beginCell,storeMessage, TonClient, WalletContractV4} from "@ton/ton";
+import TonWeb from "tonweb-lite";
 import {getHttpEndpoint} from "@orbs-network/ton-access";
+import core_1 from "@ton/core";
 
 
 export async function createTransaction(account:any){
@@ -25,14 +26,28 @@ export async function createTransaction(account:any){
         messages: [
             internal({
                 to: "UQDOo-WUcxQnZmAeAFHJGgp_Jdqs_t_mjxGUTuYbSklG1MDx",
-                value: "0.02",
+                value: "0.01",
                 bounce: false,
             })
         ]
     })
+
+    console.log("tx.hash",tx.hash().toString("hex"))
+    const tonweb = new TonWeb();
+
     // 最后一步是发送交易的逻辑，如果不需要，可以注释掉
     // await walletContract.send(tx);
 
-    return tx;
+    // 后面几步是将交易打包成可以执行的boc格式
+    const ext = external({
+        to: wallet.address,
+        body: tx
+    })
+    console.log('ext',ext)
+
+    const builder = beginCell();
+    const finalBoc = builder.store(storeMessage(ext)).endCell().toBoc()
+
+    return tonweb.utils.bytesToBase64(finalBoc);
 
 }
