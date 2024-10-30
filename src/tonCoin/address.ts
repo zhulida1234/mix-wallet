@@ -1,4 +1,6 @@
 import {
+    fromNano,
+    TonClient,
     WalletContractV3R1,
     WalletContractV3R2,
     WalletContractV4,
@@ -11,6 +13,7 @@ import {keyPairFromSeed} from "@ton/crypto";
 import {WalletVersion} from "./walletCommon";
 import {derivePath, getPublicKey} from "ed25519-hd-key";
 import TonWeb from "tonweb-lite";
+import {getHttpEndpoint} from "@orbs-network/ton-access";
 const HARDENED_OFFSET = 0x80000000;
 const ED25519_CURVE = 'ed25519 seed';
 const replaceDerive = (val: string): string => val.replace("'", '');
@@ -76,29 +79,51 @@ export async function createAddressByWalletVersion(mnemonic:string,version:Walle
 
     console.log("public Key",keyPair.publicKey.toString("hex"))
     console.log("private_Key",keyPair.secretKey.toString("hex"))
-
+    let wallet;
     let address = "";
+    let balance;
+
+    // initialize ton rpc client on testnet
+    const endpoint = await getHttpEndpoint({ network: "mainnet" });
+    const client = new TonClient({ endpoint });
 
     switch (version) {
         case WalletVersion.V3R1:
-             address = WalletContractV3R1.create({ workchain:0, publicKey:keyPair.publicKey }).address.toString({bounceable:false});
+             wallet = WalletContractV3R1.create({ workchain:0, publicKey:keyPair.publicKey })
+             address = wallet.address.toString({bounceable:false});
+             balance = await client.getBalance(wallet.address);
+             break;
         case WalletVersion.V3R2:
-            address = WalletContractV3R2.create({ workchain:0, publicKey:keyPair.publicKey }).address.toString({bounceable:false});
+            wallet = WalletContractV3R2.create({ workchain:0, publicKey:keyPair.publicKey })
+            address = wallet.address.toString({bounceable:false});
+            balance = await client.getBalance(wallet.address);
+            break;
         case WalletVersion.V4R1:
             throw new Error('Unsupported wallet contract version - v4R1');
         case WalletVersion.V4R2:
-            address = WalletContractV4.create({ workchain:0, publicKey:keyPair.publicKey }).address.toString({bounceable:false});
+            wallet = WalletContractV4.create({ workchain:0, publicKey:keyPair.publicKey });
+            address = wallet.address.toString({bounceable:false});
+            balance = await client.getBalance(wallet.address);
+            break;
         case WalletVersion.V5_BETA:
-            address = WalletContractV5Beta.create({
+            wallet = WalletContractV5Beta.create({
                 walletId: {
                     networkGlobalId: -239
                 },
                 publicKey:keyPair.publicKey
-            }).address.toString({bounceable:false});
+            });
+            address = wallet.address.toString({bounceable:false});
+            balance = await client.getBalance(wallet.address);
+            break;
         case WalletVersion.V5R1:
-            address = WalletContractV5R1.create({ publicKey:keyPair.publicKey }).address.toString({bounceable:false});
+            wallet = WalletContractV5R1.create({ publicKey:keyPair.publicKey });
+            address = wallet.address.toString({bounceable:false});
+            balance = await client.getBalance(wallet.address);
+            break;
     }
 
+    // query balance from chain
+    console.log("balance:", fromNano(balance));
 
     const account ={
         publicKey: keyPair.publicKey.toString("hex"),
@@ -115,7 +140,7 @@ export async function createAddressByMnemonic(mnemonic:string){
     const publicKey = getPublicKey(key, false).toString('hex');
 
     const tonweb = new TonWeb();
-    const WalletClass = tonweb.wallet.all['v3R2'];
+    const WalletClass = tonweb.wallet.all['v4R2'];
 
     const publikKey = new Uint8Array(Buffer.from(publicKey, "hex"))
     const wallet = new WalletClass(tonweb.provider, {
