@@ -31,9 +31,13 @@
     "typescript": "^5.6.2"
   },
   "dependencies": {
+    "@bitgo/sdk-api": "^1.56.3",
+    "@bitgo/sdk-coin-avaxc": "^5.1.6",
+    "@bitgo/sdk-coin-avaxp": "^5.0.44",
     "@cosmjs/amino": "0.26.2",
     "@cosmjs/encoding": "0.26.2",
     "@ethereumjs/wallet": "^2.0.0",
+    "@mysten/sui.js": "^0.37.1",
     "@noble/ed25519": "^2.1.0",
     "@orbs-network/ton-access": "^2.3.3",
     "@solana/spl-token": "0.1.8",

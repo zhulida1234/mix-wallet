@@ -96,7 +96,7 @@ describe('btc unit test case', () => {
             ],
         };
         const rawHex = buildAndSignTx({
-            privateKey: process.env.BTC_PRIVATE_KEY,
+            privateKey: process.env.BTC_PRIVATE_KEY!,
             signObj: data,
             network: "mainnet"
         });
