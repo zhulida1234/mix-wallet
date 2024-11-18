@@ -1,9 +1,13 @@
 import * as bip39 from "bip39";
 import {generateAccountBothCPXAddress} from "../../src/avax/address"
+import {chainExport,chainImport} from "../../src/avax/transcation"
 import {BitGoAPI} from '@bitgo/sdk-api';
 import {AvaxC, TransactionBuilder} from '@bitgo/sdk-coin-avaxc'
 import {CoinFamily, CoinKind, coins, Networks} from '@bitgo/statics/dist/src'
 import {BaseCoin, TransactionType} from "@bitgo/sdk-core";
+import {SingletonWallet} from "@avalabs/avalanche-wallet-sdk";
+import {BN} from "avalanche";
+import {ChainIdType} from "../../src/avax/types";
 
 require('dotenv').config();
 
@@ -68,26 +72,20 @@ describe('avax wallet test case',()=>{
         const unsignedTxForBroadcasting = unsignedTx.toBroadcastFormat();
         console.log(unsignedTxForBroadcasting)
 
-        // const halfSignedRawTx = await avaxCoin.signTransaction({
-        //     txPrebuild: {
-        //         txHex: unsignedTxForBroadcasting,
-        //     },
-        //     prv: account_1.owner_2,
-        //
-        // });
-        //
-        // console.log(halfSignedRawTx)
-
-        // avaxCoin.signMessage()
-        // avaxCoin.signTransaction()
-
 
     })
 
-    // staking amount
-    test('test offline sign transaction with chain p',()=>{
+    // avax的最小单位是 navax，avax的精度为9位
+    // transfer amount from chainC to chainP
+    test('test export amt from C to P',async ()=>{
+        const TEST_KEY = 'PrivateKey-r6yxM4MiGc93hZ4QxSHhixLEH5RtPjGw6Y85gzg8mgaia6HT3'
+        const wallet = new SingletonWallet(TEST_KEY)
 
+        const sourceChain: ChainIdType = 'X'
+        const targetChain: ChainIdType = 'P'
+        const result = await chainExport(new BN(100000000),sourceChain,targetChain,wallet)
 
+        console.log(result)
     })
 
 
