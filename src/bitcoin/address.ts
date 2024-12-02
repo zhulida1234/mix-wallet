@@ -57,3 +57,38 @@ export function createAddress(params: any): any {
       };
 
 }
+
+export function createMultiSignAddress(params:any){
+    const { pubkeys, network, method, threshold } = params;
+    switch (method) {
+        case 'p2pkh':
+            return bitcoin.payments.p2sh({
+                redeem: bitcoin.payments.p2ms({
+                    m: threshold,
+                    network: bitcoin.networks[network],
+                    pubkeys
+                })
+            }).address;
+        case 'p2wpkh':
+            return bitcoin.payments.p2wsh({
+                redeem: bitcoin.payments.p2ms({
+                    m: threshold,
+                    network: bitcoin.networks[network],
+                    pubkeys
+                })
+            }).address;
+        case 'p2sh':
+            return bitcoin.payments.p2sh({
+                redeem: bitcoin.payments.p2wsh({
+                    redeem: bitcoin.payments.p2ms({
+                        m: threshold,
+                        network: bitcoin.networks[network],
+                        pubkeys
+                    })
+                })
+            }).address;
+        default:
+            console.log('This way can not support');
+            return '0x00';
+    }
+}

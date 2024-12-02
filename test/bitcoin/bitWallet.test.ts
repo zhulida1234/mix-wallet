@@ -1,5 +1,5 @@
 import * as bip39 from "bip39";
-import { createAddress } from "../../src/bitcoin/address";
+import {createAddress, createMultiSignAddress} from "../../src/bitcoin/address";
 import { buildAndSignTx} from "../../src/bitcoin/transcation";
 require('dotenv').config();
 import * as assert from 'assert';
@@ -77,6 +77,24 @@ describe('btc unit test case', () => {
         assert.strictEqual(account.privateKey, '23f0315a1b5a86eadacfa7c302430a7806ea86db52c61f15da1348431c3e8ac2');
         assert.strictEqual(account.publicKey, '0314f17ba7b5102714aff10dbdaed94526b399180a95244feb28984941c333bbdd');
     });
+
+    //该地址转出资金，需要至少两个私钥签名才可以发送成功
+    test('createMultiSign Address',() =>{
+        let pubkey1 = "0314f17ba7b5102714aff10dbdaed94526b399180a95244feb28984941c333bbdd";
+        let pubkey2 = "0964f17ba7b5102714aff10a8b13494526b399180a95244feb28984941c333a891";
+        let pubkey3 = "";
+        const params = {
+            pubkeys: [pubkey1, pubkey2, pubkey3],  // 三个参与者的公钥
+            network: 'mainnet',  // 使用主网
+            method: 'p2sh',  // 选择地址类型
+            threshold: 2  // 需要至少 2 个签名才能花费
+        };
+
+        const multiSigAddress = createMultiSignAddress(params);
+        console.log(multiSigAddress)
+
+    })
+
 
     test('offline sign tx', async () => {
         const data = {
